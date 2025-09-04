@@ -2,7 +2,7 @@ import sqlite3
 import json
 
 DB_PATH = "Data/crosswords.sqlite3"
-OUTPUT_FILE = "Data/short_answers.json"
+OUTPUT_FILE = "short_answers.json"
 
 conn = sqlite3.connect(DB_PATH)
 cursor = conn.cursor()
@@ -15,8 +15,10 @@ WHERE length(answer) BETWEEN 3 AND 5
   AND answer GLOB '[A-Za-z]*'
   AND answer NOT LIKE '% %'
   AND answer NOT LIKE '%-%'
-ORDER BY answer ASC;
+  AND answer != 'nan'
+LIMIT 1000;
 """
+# ORDER BY answer ASC;
 
 cursor.execute(query)
 results = cursor.fetchall()
